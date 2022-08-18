@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
+import TextInputForm from "./TextInputForm";
 
-function App() {
+const App = () => {
+  console.log("app")
+  const [task, getTask] = useState("")
   return (
-    <div className="App"></div>
+    <div className="App">
+      <TextInputForm getTask={getTask}/>
+      <>{task}</>
+    </div>
   );
 }
 
