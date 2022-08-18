@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import TextInputForm from "./TextInputForm";
+import TextInputForm from "./Components/TextInputForm";
+import TasksList from "./Components/TasksList";
 
 const App = () => {
-  console.log("app")
-  const [task, getTask] = useState("")
+  const [tasks, setTasks] = useState([{}])
+
   return (
     <div className="App">
-      <TextInputForm getTask={getTask}/>
-      <>{task}</>
+      <TextInputForm setTasks={setTasks} tasks={tasks}/>
+      <br/>
+      <hr/>
+      <TasksList tasks={tasks} />
     </div>
   );
 }
