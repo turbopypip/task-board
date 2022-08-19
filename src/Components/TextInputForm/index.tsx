@@ -26,14 +26,25 @@ const TextInputForm: FC<Props> = ({setTasks ,tasks}) => {
   }
 
   return (
-    <form onSubmit={(e) => onSubmit(e)}>
-      <input
-        value={task.title}
-        onChange={e => setTask({id: Date.now(),title: e.target.value})}
-        type="text"
-      />
-      <input type="submit"/>
-    </form>
+    <>
+      <form
+        style={{
+          display: "flex",
+          margin: "0 40% 0 40%",
+          justifyContent: "space-between"
+        }}
+        onSubmit={(e) => onSubmit(e)}
+      >
+        <input
+          value={task.title}
+          onChange={e => setTask({id: Date.now(),title: e.target.value})}
+          type="text"
+        />
+        <input type="submit"/>
+      </form>
+      <br/>
+      <hr style={{margin: "0 40% 0 40%"}}/>
+    </>
   );
 };
 

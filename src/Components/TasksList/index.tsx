@@ -1,21 +1,25 @@
 import React, { FC } from 'react';
 import { Task } from "../../types";
+import TaskItem from "./TaskItem";
 
 type Props = {
+  setTasks: ([]) => void;
   tasks: Task[]
 }
-const TasksList: FC<Props> = ({tasks}) => {
+const TasksList: FC<Props> = ({setTasks, tasks}) => {
+
+  const removeTask = (task: Task) => {
+    setTasks(tasks.filter(t=> t.id !== task.id))
+  }
+
   return (
-    <div>
+    <div style={{margin: "0 40% 0 40%"}}>
       {
         tasks.length
           ?
-          tasks.map((task, index) =>
-            <div key={task.id}>
-              {index}. {task.title}<br/>
-            </div>)
+          tasks.map((task, index) => <TaskItem remove={removeTask} task={task} index={index}/>)
           :
-          <>Задания не найдены!</>
+          <p style={{textAlign: "center"}}>Задания не найдены!</p>
       }
     </div>
   );
