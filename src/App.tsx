@@ -3,14 +3,12 @@ import TextInputForm from "./Components/TextInputForm";
 import TasksList from "./Components/TasksList";
 
 const App = () => {
-  const [tasks, setTasks] = useState([{}])
+  const [tasks, setTasks] = useState([{title: "Наименование", id: 0}])
 
   return (
     <div className="App">
       <TextInputForm setTasks={setTasks} tasks={tasks}/>
-      <br/>
-      <hr/>
-      <TasksList tasks={tasks} />
+      <TasksList setTasks={setTasks} tasks={tasks} />
     </div>
   );
 }
