@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import TextInputForm from "./Components/TextInputForm";
 import TasksList from "./Components/TasksList";
-import {Task} from "./types";
+import { Task } from "./types";
 
 const App = () => {
-  const [tasks, setTasks] = useState<Task[]>(JSON.parse(localStorage.getItem("tasks")) || []);
+  const [tasks, setTasks] = useState<Task[]>(
+    JSON.parse(localStorage.getItem("tasks")) || []
+  );
   const [task, setTask] = useState({ title: "", id: "" });
-
 
   return (
     <div className="App">

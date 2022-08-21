@@ -17,26 +17,29 @@ const TaskItem: FC<Props> = ({ tasks, setTask, remove, index, task }) => {
   const HandleAccept = () => {
     const prevTask = tasks.findIndex((t) => t.id === task.id);
 
-    if (temporaryTask.title.length > 0 && !tasks.find((t) => t.title === temporaryTask.title)){
-      if (temporaryTask.title.length > 17){
-        let newTitle = temporaryTask.title.split("")
-        let i = 0
-        while (i < temporaryTask.title.length - 1){
-          i = i + 1
-          if (i % 17 == 0){
-            newTitle[i] = newTitle[i] + `\n`
-            console.log(newTitle)
+    if (
+      temporaryTask.title.length > 0 &&
+      !tasks.find((t) => t.title === temporaryTask.title)
+    ) {
+      if (temporaryTask.title.length > 17) {
+        let newTitle = temporaryTask.title.split("");
+        let i = 0;
+        while (i < temporaryTask.title.length - 1) {
+          i = i + 1;
+          if (i % 17 == 0) {
+            newTitle[i] = newTitle[i] + `\n`;
+            console.log(newTitle);
           }
         }
-        temporaryTask.title = newTitle.join("")
+        temporaryTask.title = newTitle.join("");
 
-        localStorage.setItem(temporaryTask.id, temporaryTask.title)
+        localStorage.setItem(temporaryTask.id, temporaryTask.title);
         tasks[prevTask] = temporaryTask;
         setTask({ title: "", id: "" });
         setChangeTask(false);
       }
 
-      localStorage.setItem(temporaryTask.id, temporaryTask.title)
+      localStorage.setItem(temporaryTask.id, temporaryTask.title);
       tasks[prevTask] = temporaryTask;
       setTask({ title: "", id: "" });
       setChangeTask(false);
@@ -44,24 +47,23 @@ const TaskItem: FC<Props> = ({ tasks, setTask, remove, index, task }) => {
   };
 
   const HandleRemove = () => {
-    remove(task)
-    setTaskDone(false)
-  }
+    remove(task);
+    setTaskDone(false);
+  };
 
   const HandleChangeTask = () => {
-    setChangeTask(true)
-    setTaskDone(false)
-  }
+    setChangeTask(true);
+    setTaskDone(false);
+  };
 
   const HandleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTemporaryTask({ id: `${task.id}`, title: e.target.value })
-
-  }
+    setTemporaryTask({ id: `${task.id}`, title: e.target.value });
+  };
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      HandleAccept()
+    if (e.key === "Enter") {
+      HandleAccept();
     }
-  }
+  };
 
   return (
     <div
@@ -72,9 +74,7 @@ const TaskItem: FC<Props> = ({ tasks, setTask, remove, index, task }) => {
         justifyContent: "space-between",
       }}
     >
-      <div
-        style={{ textDecoration: `${taskDone ? "line-through" : "none"}` }}
-      >
+      <div style={{ textDecoration: `${taskDone ? "line-through" : "none"}` }}>
         {changeTask ? (
           <div
             style={{

@@ -9,30 +9,32 @@ type Props = {
 };
 
 const TextInputForm: FC<Props> = ({ task, setTask, setTasks, tasks }) => {
-
   const setTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTask({id: `${Date.now()}`, title: e.target.value})
+    setTask({ id: `${Date.now()}`, title: e.target.value });
   };
 
   const createTask = (newTask: Task) => {
-    if (newTask.title.length > 0 && !tasks.find((t) => t.title === task.title)){
-      if (newTask.title.length > 17){
-        let newTitle = newTask.title.split("")
-        let i = 0
-        while (i < newTask.title.length - 1){
-          i = i + 1
-          if (i % 17 == 0){
-            newTitle[i] = newTitle[i] + `\n`
-            console.log(newTitle)
+    if (
+      newTask.title.length > 0 &&
+      !tasks.find((t) => t.title === task.title)
+    ) {
+      if (newTask.title.length > 17) {
+        let newTitle = newTask.title.split("");
+        let i = 0;
+        while (i < newTask.title.length - 1) {
+          i = i + 1;
+          if (i % 17 == 0) {
+            newTitle[i] = newTitle[i] + `\n`;
+            console.log(newTitle);
           }
         }
-        newTask.title = newTitle.join("")
-        console.log(newTask.title)
+        newTask.title = newTitle.join("");
+        console.log(newTask.title);
         setTasks([newTask, ...tasks]);
-        localStorage.setItem("tasks",  JSON.stringify([newTask, ...tasks]))
+        localStorage.setItem("tasks", JSON.stringify([newTask, ...tasks]));
       }
       setTasks([newTask, ...tasks]);
-      localStorage.setItem("tasks",  JSON.stringify([newTask, ...tasks]))
+      localStorage.setItem("tasks", JSON.stringify([newTask, ...tasks]));
     }
   };
 
@@ -43,7 +45,7 @@ const TextInputForm: FC<Props> = ({ task, setTask, setTasks, tasks }) => {
       id: `${Date.now()}`,
     };
     createTask(newTask);
-    localStorage.setItem(newTask.id, newTask.title)
+    localStorage.setItem(newTask.id, newTask.title);
     setTask({ title: "", id: "" });
   };
 
@@ -57,11 +59,7 @@ const TextInputForm: FC<Props> = ({ task, setTask, setTasks, tasks }) => {
         }}
         onSubmit={(e) => onSubmit(e)}
       >
-        <input
-          value={task.title}
-          onChange={setTitle}
-          type="text"
-        />
+        <input value={task.title} onChange={setTitle} type="text" />
         <input type="submit" />
       </form>
       <br />
