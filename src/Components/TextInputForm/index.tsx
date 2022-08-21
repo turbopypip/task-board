@@ -4,24 +4,47 @@ import { Task } from "../../types";
 type Props = {
   task: Task;
   setTask: (task: Task) => void;
-  setTasks: ([]) => void;
+  setTasks: (tasks: Task[]) => void;
   tasks: Task[];
 };
 
 const TextInputForm: FC<Props> = ({ task, setTask, setTasks, tasks }) => {
+
+  const setTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTask({id: `${Date.now()}`, title: e.target.value})
+  };
+
   const createTask = (newTask: Task) => {
-    setTasks([...tasks, newTask]);
+    if (newTask.title.length > 0 && !tasks.find((t) => t.title === task.title)){
+      if (newTask.title.length > 17){
+        let newTitle = newTask.title.split("")
+        let i = 0
+        while (i < newTask.title.length - 1){
+          i = i + 1
+          if (i % 17 == 0){
+            newTitle[i] = newTitle[i] + `\n`
+            console.log(newTitle)
+          }
+        }
+        newTask.title = newTitle.join("")
+        console.log(newTask.title)
+        setTasks([newTask, ...tasks]);
+        localStorage.setItem("tasks",  JSON.stringify([newTask, ...tasks]))
+      }
+      setTasks([newTask, ...tasks]);
+      localStorage.setItem("tasks",  JSON.stringify([newTask, ...tasks]))
+    }
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newTask = {
       ...task,
-      id: Date.now(),
+      id: `${Date.now()}`,
     };
-
     createTask(newTask);
-    setTask({ title: "", id: 0 });
+    localStorage.setItem(newTask.id, newTask.title)
+    setTask({ title: "", id: "" });
   };
 
   return (
@@ -36,7 +59,7 @@ const TextInputForm: FC<Props> = ({ task, setTask, setTasks, tasks }) => {
       >
         <input
           value={task.title}
-          onChange={(e) => setTask({ id: Date.now(), title: e.target.value })}
+          onChange={setTitle}
           type="text"
         />
         <input type="submit" />

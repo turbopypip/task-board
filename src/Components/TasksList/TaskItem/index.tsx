@@ -12,25 +12,67 @@ type Props = {
 const TaskItem: FC<Props> = ({ tasks, setTask, remove, index, task }) => {
   const [taskDone, setTaskDone] = useState(false);
   const [changeTask, setChangeTask] = useState(false);
-  const [temporaryTask, setTemporaryTask] = useState({ title: "", id: 0 });
+  const [temporaryTask, setTemporaryTask] = useState({ title: "", id: "" });
 
-  const HandleChange = () => {
+  const HandleAccept = () => {
     const prevTask = tasks.findIndex((t) => t.id === task.id);
-    tasks[prevTask] = temporaryTask;
-    setTask({ title: "", id: 0 });
-    setChangeTask(false);
+
+    if (temporaryTask.title.length > 0 && !tasks.find((t) => t.title === temporaryTask.title)){
+      if (temporaryTask.title.length > 17){
+        let newTitle = temporaryTask.title.split("")
+        let i = 0
+        while (i < temporaryTask.title.length - 1){
+          i = i + 1
+          if (i % 17 == 0){
+            newTitle[i] = newTitle[i] + `\n`
+            console.log(newTitle)
+          }
+        }
+        temporaryTask.title = newTitle.join("")
+
+        localStorage.setItem(temporaryTask.id, temporaryTask.title)
+        tasks[prevTask] = temporaryTask;
+        setTask({ title: "", id: "" });
+        setChangeTask(false);
+      }
+
+      localStorage.setItem(temporaryTask.id, temporaryTask.title)
+      tasks[prevTask] = temporaryTask;
+      setTask({ title: "", id: "" });
+      setChangeTask(false);
+    }
   };
+
+  const HandleRemove = () => {
+    remove(task)
+    setTaskDone(false)
+  }
+
+  const HandleChangeTask = () => {
+    setChangeTask(true)
+    setTaskDone(false)
+  }
+
+  const HandleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTemporaryTask({ id: `${task.id}`, title: e.target.value })
+
+  }
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      HandleAccept()
+    }
+  }
 
   return (
     <div
       style={{
+        maxWidth: "20vw",
         marginTop: "5%",
         display: "flex",
         justifyContent: "space-between",
       }}
     >
       <div
-        key={task.id}
         style={{ textDecoration: `${taskDone ? "line-through" : "none"}` }}
       >
         {changeTask ? (
@@ -44,16 +86,16 @@ const TaskItem: FC<Props> = ({ tasks, setTask, remove, index, task }) => {
           >
             {index}.{" "}
             <input
+              id="ChangeTask"
               type="text"
               placeholder="изменить"
-              onChange={(e) =>
-                setTemporaryTask({ id: task.id, title: e.target.value })
-              }
+              onChange={HandleInput}
+              onKeyPress={onKeyPress}
             />
           </div>
         ) : (
           <>
-            {index}. {task.title}
+            {index + 1}. {localStorage.getItem(task.id)}
             <br />
           </>
         )}
@@ -69,7 +111,7 @@ const TaskItem: FC<Props> = ({ tasks, setTask, remove, index, task }) => {
         {changeTask ? (
           <>
             <li>
-              <button onClick={HandleChange}>П</button>
+              <button onClick={HandleAccept}>П</button>
             </li>
             <li>
               <button onClick={() => setChangeTask(false)}>О</button>
@@ -78,10 +120,10 @@ const TaskItem: FC<Props> = ({ tasks, setTask, remove, index, task }) => {
         ) : (
           <>
             <li>
-              <button onClick={() => remove(task)}>У</button>
+              <button onClick={HandleRemove}>У</button>
             </li>
             <li>
-              <button onClick={() => setChangeTask(true)}>И</button>
+              <button onClick={HandleChangeTask}>И</button>
             </li>
             <li>
               <button onClick={() => setTaskDone(!taskDone)}>З</button>

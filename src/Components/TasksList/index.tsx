@@ -1,22 +1,26 @@
-import React, { FC } from "react";
+import React, {FC} from "react";
 import { Task } from "../../types";
 import TaskItem from "./TaskItem";
 
 type Props = {
-  setTasks: ([]) => void;
+  setTasks: (tasks: Task[]) => void;
   tasks: Task[];
   setTask: (task: Task) => void;
 };
-const TasksList: FC<Props> = ({ setTask, setTasks, tasks }) => {
+const TasksList: FC<Props> = ({setTask, setTasks, tasks}) => {
+
   const removeTask = (task: Task) => {
-    setTasks(tasks.filter((t) => t.id !== task.id));
+    let newTasks = tasks.filter((t) => t.id !== task.id)
+    localStorage.setItem("tasks", JSON.stringify(newTasks))
+    setTasks(newTasks);
   };
 
   return (
-    <div style={{ margin: "0 40% 0 40%" }}>
+    <div style={{margin: "0 40% 0 40%"}}>
       {tasks.length ? (
-        tasks.map((task, index) => (
+        tasks.map((task: Task, index: number) => (
           <TaskItem
+            key={task.id}
             tasks={tasks}
             setTask={setTask}
             remove={removeTask}
@@ -25,7 +29,7 @@ const TasksList: FC<Props> = ({ setTask, setTasks, tasks }) => {
           />
         ))
       ) : (
-        <p style={{ textAlign: "center" }}>Задания не найдены!</p>
+        <p style={{textAlign: "center"}}>Задания не найдены!</p>
       )}
     </div>
   );
